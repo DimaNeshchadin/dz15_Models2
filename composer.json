@@ -1,0 +1,12 @@
+{
+  "autoload": {
+    "psr-4": {
+      "App\\": "src"
+    }
+  },
+  "require": {
+    "illuminate/view": "^6.0",
+    "illuminate/database": "^6.13",
+    "illuminate/pagination": "^6.13"
+  }
+}

@@ -1,0 +1,49 @@
+version: "3"
+
+networks:
+  app:
+    driver: bridge
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: .docker/nginx/Dockerfile
+    networks:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - ./public:/src/app/public
+
+  php-fpm:
+    build:
+      context: .
+      dockerfile: .docker/php-fpm/Dockerfile
+    networks:
+      - app
+    volumes:
+      - .:/src/app
+
+  mysql:
+    image: "mysql:5.7.28"
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=sandbox
+      - MYSQL_ROOT_PASSWORD=secret
+    networks:
+      - app
+    volumes:
+      - .docker/mysql/var/lib/mysql:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8081:80
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      - mysql
+    networks:
+      - app
